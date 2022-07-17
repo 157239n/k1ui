@@ -23,11 +23,18 @@ public class Server {
      */
     public void getBytes(String path, Function<HttpExchange, byte[]> f) {
         server.createContext(path, exchange -> {
-            byte[] res = f.apply(exchange);
+            byte[] res;
             int code = 200;
-            if (res == null) {
-                res = "Something went wrong, check java logs for more".getBytes(StandardCharsets.UTF_8);
+            try {
+                res = f.apply(exchange);
+                if (res == null) {
+                    res = "Something went wrong, check java logs for more".getBytes(StandardCharsets.UTF_8);
+                    code = 400;
+                }
+            } catch (Exception e) {
+                res = e.toString().getBytes(StandardCharsets.UTF_8);
                 code = 400;
+                e.printStackTrace();
             }
             exchange.sendResponseHeaders(code, res.length);
             OutputStream out = exchange.getResponseBody();

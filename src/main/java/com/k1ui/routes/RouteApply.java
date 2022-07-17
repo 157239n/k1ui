@@ -3,6 +3,7 @@ package com.k1ui.routes;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.k1ui.*;
 import com.sun.net.httpserver.HttpExchange;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,7 +27,7 @@ public class RouteApply {
             NativeListener nativeListener = NativeListener.singleton;
             long beginTime = System.currentTimeMillis();
             Robot robot = new Robot();
-            JSONObject data = JS.map(new String(httpExchange.getRequestBody().readAllBytes()));
+            JSONObject data = JS.map(new String(IOUtils.toByteArray(httpExchange.getRequestBody())));
             JSONArray events = data.getJSONArray("events");
 
             Wrapper pressedEsc = new Wrapper(false);
