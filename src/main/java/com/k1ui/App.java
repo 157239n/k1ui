@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class App extends PApplet {
+    public static String centerText = "";
     public void settings() {
         size(800, 800);
         //fullScreen();
@@ -45,12 +46,22 @@ public class App extends PApplet {
     }
 
     public void mouseClicked() {
-        capture();
+        //capture();
         System.out.println("Clicked");
     }
 
     public void draw() {
         background(0, 0, 0);
+        textSize(12);
+        text("mouseX: " + NativeListener.mouseX, 10, 20);
+        text("mouseY: " + NativeListener.mouseY, 10, 40);
+        text("ctrl: " + NativeListener.ctrl, 10, 60);
+        text("shift: " + NativeListener.shift, 10, 80);
+        text("alt: " + NativeListener.alt, 10, 100);
+        Rectangle sel = Screen.selection;
+        text("Selected area: (" + sel.x + ", " + sel.y + ", " + sel.width + ", " + sel.height + ")", 10, 120);
+        textSize(16);
+        text(centerText, 100, 200);
         ellipse(mouseX, mouseY, 20, 20);
     }
 }
