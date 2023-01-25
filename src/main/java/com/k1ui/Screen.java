@@ -20,17 +20,26 @@ import java.util.ArrayList;
  * each other fine
  */
 public class Screen {
+
     public static Screen[] screens;
     public static int offsetX = 0; // robot = native + offsetX
     public static int offsetY = 0;
-    public static Rectangle selection;
-
+    public static Rectangle selection; // user can select a specific rectangle on the screen, and all coordinates info will reference that region
     private final Rectangle robotBounds;
 
     private Screen(Rectangle robotBounds) {
         this.robotBounds = robotBounds;
     }
 
+    public static String selectionJs() {
+        Rectangle s = selection;
+        return JS.obj("x", s.x, "y", s.y, "w", s.width, "h", s.height).toString();
+    }
+
+    /**
+     * Tries to get all available screens information, like where are they,
+     * what resolution and whatnot, to then deposit that into Screen.screens.
+     */
     public static void setup() {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] gs = ge.getScreenDevices();

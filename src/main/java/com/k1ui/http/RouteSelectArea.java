@@ -1,19 +1,19 @@
-package com.k1ui.routes;
+package com.k1ui.http;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.k1ui.*;
+import com.k1ui.Applet;
+import com.k1ui.NativeListener;
+import com.k1ui.Screen;
+import com.k1ui.Wrapper;
 
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class RouteSelect {
+public class RouteSelectArea {
     /**
-     * GET /select
-     *
      * Selects specific area on screen.
      */
     public static String select() {
-        NativeListener nativeListener = NativeListener.singleton;
         Wrapper stage = new Wrapper(0);
         Point begin = new Point(0, 0);
         Point end = new Point(0, 0);
@@ -31,22 +31,24 @@ public class RouteSelect {
                 stage.value = 1;
             }
         };
-        nativeListener.registerCb("keyPressed", f1);
-        nativeListener.registerCb("keyReleased", f2);
+        NativeListener.registerCb("keyPressed", f1);
+        NativeListener.registerCb("keyReleased", f2);
         while ((int) stage.value < 2) {
-            App.centerText = "Selecting area.\n\nHold down ctrl, move mouse,\nthen lift ctrl to select area\non screen\n\nBegin: (" + begin.x + ", " + begin.y + ")\nEnd: (" + NativeListener.mouseX + ", " + NativeListener.mouseY + ")";
+            Applet.centerText = "Selecting area.\n\nHold down ctrl, move mouse,\nthen lift ctrl to select area\non screen\n\nBegin: (" + begin.x + ", " + begin.y + ")\nEnd: (" + NativeListener.mouseX + ", " + NativeListener.mouseY + ")";
             Thread.yield();
         }
-        nativeListener.removeCb("keyPressed", f1);
-        nativeListener.removeCb("keyReleased", f2);
-        App.centerText = "";
+        NativeListener.removeCb("keyPressed", f1);
+        NativeListener.removeCb("keyReleased", f2);
+        Applet.centerText = "";
         if ((int) stage.value >= 2) {
             int x1 = Math.min(begin.x, end.x);
             int x2 = Math.max(begin.x, end.x);
             int y1 = Math.min(begin.y, end.y);
             int y2 = Math.max(begin.y, end.y);
-            Screen.selection = new Rectangle(x1, y1, x2-x1, y2-y1);
-            return Screen.selection.toString();
+            int w = x2 - x1;
+            int h = y2 - y1;
+            Screen.selection = new Rectangle(x1, y1, w, h);
+            return Screen.selectionJs();
         }
         return null;
     }

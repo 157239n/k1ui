@@ -10,11 +10,12 @@ import java.util.Map;
  * Dictionary for translating KeyNativeEvent to KeyEvent
  */
 public class Dict {
-    public static Map<Integer, Integer> nativeToJava;
-    public static Map<Integer, Integer> javaToNative;
-    static {
-        nativeToJava = new HashMap<>();
+    private static final Map<Integer, Integer> nativeToJava = new HashMap<>();
+    private static final Map<Integer, Integer> javaToNative = new HashMap<>();
+    private static final Map<Integer, String> javaToText = new HashMap<>();
+    private static final Map<String, Integer> textToJava = new HashMap<>();
 
+    static {
         nativeToJava.put(NativeKeyEvent.VC_ALT, KeyEvent.VK_ALT);
         nativeToJava.put(NativeKeyEvent.VC_CONTROL, KeyEvent.VK_CONTROL);
         nativeToJava.put(NativeKeyEvent.VC_SHIFT, KeyEvent.VK_SHIFT);
@@ -123,8 +124,35 @@ public class Dict {
         nativeToJava.put(NativeKeyEvent.VC_Y, KeyEvent.VK_Y);
         nativeToJava.put(NativeKeyEvent.VC_Z, KeyEvent.VK_Z);
 
-        javaToNative = new HashMap<>();
         nativeToJava.forEach((key, value) -> javaToNative.put(value, key));
+    }
+
+    static {
+        javaToText.put(KeyEvent.VK_MINUS, "-");
+        javaToText.put(KeyEvent.VK_UNDERSCORE, "_");
+        javaToText.put(KeyEvent.VK_EQUALS, "=");
+        javaToText.put(KeyEvent.VK_PLUS, "+");
+        javaToText.put(KeyEvent.VK_OPEN_BRACKET, "[");
+        javaToText.put(KeyEvent.VK_CLOSE_BRACKET, "]");
+        javaToText.put(KeyEvent.VK_BACK_SLASH, "\\");
+        javaToText.put(KeyEvent.VK_SEMICOLON, ";");
+        javaToText.put(KeyEvent.VK_COLON, ":");
+        javaToText.put(KeyEvent.VK_QUOTE, "'");
+        javaToText.put(KeyEvent.VK_QUOTEDBL, "\"");
+        javaToText.put(KeyEvent.VK_COMMA, ",");
+        javaToText.put(KeyEvent.VK_PERIOD, ".");
+        javaToText.put(KeyEvent.VK_SLASH, "/");
+        javaToText.put(KeyEvent.VK_SPACE, " ");
+
+        javaToText.put(KeyEvent.VK_EXCLAMATION_MARK, "!");
+        javaToText.put(KeyEvent.VK_AT, "@");
+        javaToText.put(KeyEvent.VK_NUMBER_SIGN, "#");
+        javaToText.put(KeyEvent.VK_DOLLAR, "$");
+        javaToText.put(KeyEvent.VK_CIRCUMFLEX, "^");
+        javaToText.put(KeyEvent.VK_AMPERSAND, "&");
+        javaToText.put(KeyEvent.VK_MULTIPLY, "*");
+
+        javaToText.forEach((key, value) -> textToJava.put(value, key));
     }
 
     public static int toJava(int nativeKeyCode) {
@@ -133,5 +161,13 @@ public class Dict {
 
     public static int toNative(int javaKeyCode) {
         return javaToNative.getOrDefault(javaKeyCode, -1);
+    }
+
+    public static int toJava(String text) {
+        return textToJava.getOrDefault(text, -1);
+    }
+
+    public static String toText(int javaKeyCode) {
+        return javaToText.getOrDefault(javaKeyCode, "");
     }
 }

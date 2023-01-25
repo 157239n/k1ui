@@ -23,71 +23,45 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
-import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
-import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
-import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
-import com.github.kwhat.jnativehook.mouse.NativeMouseMotionListener;
-import com.github.kwhat.jnativehook.mouse.NativeMouseWheelEvent;
-import com.github.kwhat.jnativehook.mouse.NativeMouseWheelListener;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.ItemSelectable;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import com.github.kwhat.jnativehook.mouse.*;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import javax.swing.text.BadLocationException;
 
 /**
  * A demonstration of how to use the JNativeHook library.
  *
  * @author Alexander Barker (<a href="mailto:alex@1stleg.com">alex@1stleg.com</a>)
  * @version 2.0
- * @since 1.0
  * @see GlobalScreen
  * @see NativeKeyListener
+ * @since 1.0
  */
-public class NativeHookDemo extends JFrame implements ActionListener, ItemListener,
-        NativeKeyListener, NativeMouseInputListener, NativeMouseWheelListener, WindowListener {
+public class NativeHookDemo extends JFrame implements ActionListener, ItemListener, NativeKeyListener, NativeMouseInputListener, NativeMouseWheelListener, WindowListener {
+
     /**
      * The Constant serialVersionUID.
      */
     private static final long serialVersionUID = 1541183202160543102L;
-
+    /**
+     * Logging
+     */
+    private static final Logger log = Logger.getLogger(GlobalScreen.class.getPackage().getName());
     /**
      * Menu Items
      */
     private final JMenu menuSubListeners;
     private final JMenuItem menuItemQuit, menuItemClear;
     private final JCheckBoxMenuItem menuItemEnable, menuItemKeyboardEvents, menuItemButtonEvents, menuItemMotionEvents, menuItemWheelEvents;
-
     /**
      * The text area to display event info.
      */
     private final JTextArea txtEventInfo;
-
-    /**
-     * Logging
-     */
-    private static final Logger log = Logger.getLogger(GlobalScreen.class.getPackage().getName());
 
     /**
      * Instantiates a new native hook demo.
@@ -191,6 +165,41 @@ public class NativeHookDemo extends JFrame implements ActionListener, ItemListen
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
 
         setVisible(true);
+    }
+
+    /**
+     * The demo project entry point.
+     *
+     * @param args unused.
+     */
+    public static void main(String[] args) {
+        String copyright =
+                "\n" +
+                        "JNativeHook: Global keyboard and mouse listeners for Java.\n" +
+                        "Copyright (C) 2006-2021 Alexander Barker.  All Rights Reserved.\n" +
+                        "https://github.com/kwhat/jnativehook/\n" +
+                        "\n" +
+                        "JNativeHook is free software: you can redistribute it and/or modify\n" +
+                        "it under the terms of the GNU Lesser General Public License as published\n" +
+                        "by the Free Software Foundation, either version 3 of the License, or\n" +
+                        "(at your option) any later version.\n" +
+                        "\n" +
+                        "JNativeHook is distributed in the hope that it will be useful,\n" +
+                        "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+                        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+                        "GNU General Public License for more details.\n" +
+                        "\n" +
+                        "You should have received a copy of the GNU Lesser General Public License\n" +
+                        "along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
+        System.out.println(copyright);
+
+        SwingUtilities.invokeLater(
+                new Runnable() {
+                    public void run() {
+                        new NativeHookDemo();
+                    }
+                }
+        );
     }
 
     /**
@@ -348,35 +357,45 @@ public class NativeHookDemo extends JFrame implements ActionListener, ItemListen
      *
      * @see java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
      */
-    public void windowActivated(WindowEvent e) { /* Do Nothing */ }
+    public void windowActivated(WindowEvent e) {
+        /* Do Nothing */
+    }
 
     /**
      * Unimplemented
      *
      * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
      */
-    public void windowClosing(WindowEvent e) { /* Do Nothing */ }
+    public void windowClosing(WindowEvent e) {
+        /* Do Nothing */
+    }
 
     /**
      * Unimplemented
      *
      * @see java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent)
      */
-    public void windowDeactivated(WindowEvent e) { /* Do Nothing */ }
+    public void windowDeactivated(WindowEvent e) {
+        /* Do Nothing */
+    }
 
     /**
      * Unimplemented
      *
      * @see java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent)
      */
-    public void windowDeiconified(WindowEvent e) { /* Do Nothing */ }
+    public void windowDeiconified(WindowEvent e) {
+        /* Do Nothing */
+    }
 
     /**
      * Unimplemented
      *
      * @see java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
      */
-    public void windowIconified(WindowEvent e) { /* Do Nothing */ }
+    public void windowIconified(WindowEvent e) {
+        /* Do Nothing */
+    }
 
     /**
      * Display information about the native keyboard and mouse along with any errors that may have
@@ -426,37 +445,5 @@ public class NativeHookDemo extends JFrame implements ActionListener, ItemListen
 
         System.runFinalization();
         System.exit(0);
-    }
-
-    /**
-     * The demo project entry point.
-     *
-     * @param args unused.
-     */
-    public static void main(String[] args) {
-        String copyright = "\n"
-                + "JNativeHook: Global keyboard and mouse listeners for Java.\n"
-                + "Copyright (C) 2006-2021 Alexander Barker.  All Rights Reserved.\n"
-                + "https://github.com/kwhat/jnativehook/\n"
-                + "\n"
-                + "JNativeHook is free software: you can redistribute it and/or modify\n"
-                + "it under the terms of the GNU Lesser General Public License as published\n"
-                + "by the Free Software Foundation, either version 3 of the License, or\n"
-                + "(at your option) any later version.\n"
-                + "\n"
-                + "JNativeHook is distributed in the hope that it will be useful,\n"
-                + "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-                + "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-                + "GNU General Public License for more details.\n"
-                + "\n"
-                + "You should have received a copy of the GNU Lesser General Public License\n"
-                + "along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
-        System.out.println(copyright);
-
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new NativeHookDemo();
-            }
-        });
     }
 }

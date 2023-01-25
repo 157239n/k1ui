@@ -17,7 +17,9 @@ import java.util.*;
  * JSON Utils.
  */
 public class JS {
+
     private static List<String> indentsCache = null;
+    private static ObjectMapper _mapper = null;
 
     private static void initIndents() {
         if (indentsCache == null) {
@@ -45,8 +47,7 @@ public class JS {
         if (o instanceof List) {
             List<?> a = (List<?>) o;
             answer.append(indentsCache.get(indent) + fieldName + ": Array").append(endl);
-            for (int i = 0; i < a.size(); i++)
-                format(answer, endl, "" + i, a.get(i), indent + 1);
+            for (int i = 0; i < a.size(); i++) format(answer, endl, "" + i, a.get(i), indent + 1);
         } else if (o instanceof Map) {
             //noinspection unchecked
             Map<String, ?> m = (Map<String, ?>) o;
@@ -58,8 +59,7 @@ public class JS {
                 answer.append(indentsCache.get(indent) + fieldName + ": " + n.asText()).append(endl);
             } else if (n.isArray()) {
                 answer.append(indentsCache.get(indent) + fieldName + ": Array (JsonNode)").append(endl);
-                for (int i = 0; i < n.size(); i++)
-                    format(answer, endl, "" + i, n.get(i), indent + 1);
+                for (int i = 0; i < n.size(); i++) format(answer, endl, "" + i, n.get(i), indent + 1);
             } else {
                 answer.append(indentsCache.get(indent) + fieldName + ": Map (JsonNode)").append(endl);
                 for (Iterator<String> it = n.fieldNames(); it.hasNext(); ) {
@@ -100,11 +100,9 @@ public class JS {
         return format(o, "\n");
     }
 
-    public static<T> String formatHtml(T o) {
+    public static <T> String formatHtml(T o) {
         return "<pre>\n" + format(o, "<br>\n") + "\n</pre>";
     }
-
-    private static ObjectMapper _mapper = null;
 
     public static ObjectMapper mapper() {
         if (_mapper == null) {
@@ -168,8 +166,8 @@ public class JS {
     /**
      * Object to JSON String, but with parameter for over-arching label (Mostly for Otter DTO to json) -RF
      */
-    public static String of(Object o, String header){
-        return "{\"" + header + "\"" + ":" + of(o)+"}";
+    public static String of(Object o, String header) {
+        return "{\"" + header + "\"" + ":" + of(o) + "}";
     }
 
     public static String of(JSONObject o) {
@@ -184,14 +182,14 @@ public class JS {
     /**
      * This method, together with arr(), forms quite a nice way to build custom json objects on the go. So this...
      *
-     *     JS.obj("b", "something", "c", JS.arr(5, "d"))
+     * JS.obj("b", "something", "c", JS.arr(5, "d"))
      *
      * ...will produce this json:
      *
-     *     {
-     *       "b": "something",
-     *       "c": [ 5, "d"]
-     *     }
+     * {
+     * "b": "something",
+     * "c": [ 5, "d"]
+     * }
      *
      * Again, to get the actual string, use JS.of() on the output. There's a gotcha tho. You can't really mix
      * your custom classes with [JSONObject, JSONArray]. To do that, follow the test case in
@@ -200,8 +198,7 @@ public class JS {
     public static JSONObject obj(Object... objs) {
         if (objs.length % 2 != 0) throw new IllegalArgumentException("Have odd numbers of input!");
         JSONObject answer = new JSONObject();
-        for (int i = 0; i < objs.length / 2; i++)
-            answer.put((String) objs[2 * i], objs[2 * i + 1]);
+        for (int i = 0; i < objs.length / 2; i++) answer.put((String) objs[2 * i], objs[2 * i + 1]);
         return answer;
     }
 
@@ -216,14 +213,13 @@ public class JS {
     /**
      * Joins multiple JSONArray together. Example::
      *
-     *     # returns JS.arr(2, 3, 4, 5)
-     *     JS.join(JS.arr(2, 3), JS.arr(4, 5))
+     * # returns JS.arr(2, 3, 4, 5)
+     * JS.join(JS.arr(2, 3), JS.arr(4, 5))
      */
     public static JSONArray join(JSONArray... arrays) {
         List<Object> l = new ArrayList<>();
         for (JSONArray arr : arrays) {
-            for (int i = 0; i < arr.length(); i++)
-                l.add(arr.get(i));
+            for (int i = 0; i < arr.length(); i++) l.add(arr.get(i));
         }
         return arr(l);
     }
@@ -231,16 +227,18 @@ public class JS {
     /**
      * Joins multiple JSONObject together. Example::
      *
-     *     # returns JS.obj("a", 3, "b", 4, "c", 5)
-     *     JS.join(JS.obj("a", 3, "b", 4), JS.obj("c", 5))
+     * # returns JS.obj("a", 3, "b", 4, "c", 5)
+     * JS.join(JS.obj("a", 3, "b", 4), JS.obj("c", 5))
      */
     public static JSONObject join(JSONObject... objs) {
         List<Object> l = new ArrayList<>();
         for (JSONObject obj : objs) {
-            obj.toMap().forEach((key, value) -> {
-                l.add(key);
-                l.add(value);
-            });
+            obj
+                    .toMap()
+                    .forEach((key, value) -> {
+                        l.add(key);
+                        l.add(value);
+                    });
         }
         return obj(l.toArray());
     }
